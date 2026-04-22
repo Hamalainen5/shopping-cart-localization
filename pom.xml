@@ -9,11 +9,25 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <javafx.version>21.0.8</javafx.version>
+
+        <sonar.projectKey>shopping-cart-localization</sonar.projectKey>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.build.directory}/site/jacoco/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.exclusions>
+            **/App.java,
+            **/Launcher.java,
+            **/ShoppingCartFxApp.java,
+            **/CartService.java,
+            **/LocalizationService.java,
+            **/DatabaseConnection.java
+        </sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
@@ -34,7 +48,6 @@
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>3.5.3</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -46,7 +59,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <release>21</release>
+                    <release>17</release>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -64,6 +77,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -92,20 +108,21 @@
                     </execution>
                     <execution>
                         <id>report</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <phase>verify</phase>
                     </execution>
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>sun/util/resources/**</exclude>
-                        <exclude>sun/text/resources/**</exclude>
-                        <exclude>sun/util/cldr/**</exclude>
-                        <exclude>sun/util/resources/provider/LocaleDataProvider</exclude>
-                        <exclude>sun/text/resources/cldr/ext/FormatData_fi</exclude>
                         <exclude>App.class</exclude>
+                        <exclude>Launcher.class</exclude>
+                        <exclude>ShoppingCartFxApp.class</exclude>
+                        <exclude>ShoppingCartFxApp$*.class</exclude>
+                        <exclude>CartService.class</exclude>
+                        <exclude>LocalizationService.class</exclude>
+                        <exclude>DatabaseConnection.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -138,6 +155,12 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.11.0.3922</version>
             </plugin>
         </plugins>
     </build>
